@@ -1,3 +1,4 @@
+#include "DHT.h"
 int irPin1 = 4;
 int irPin2 = 13;
 int count = 0;
@@ -15,11 +16,19 @@ boolean outsideIr = false;
 int i = 1;
 int s = 0;
 int pre=0;
-
+long t = 0;
+DHT dht(DHT11pin,DHT11);
 void setup() {
-  Serial.begin(115200);
+ Serial.begin(115200);
+   dht.begin();
   pinMode(irPin1, INPUT);
   pinMode(irPin2, INPUT);
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
 }
 
 void loop() {
@@ -82,4 +91,45 @@ digitalWrite(in3,HIGH);
 digitalWrite(in4,LOW);
 pre=s;
 }
+}
+void curtain(){
+  delay(2000);  // Wait for 2 seconds between readings
+
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C, Humidity: ");
+  Serial.print(humidity);
+  Serial.println(" %");
+
+  // Adjust the threshold values according to your needs
+  if (temperature > 30.0) {
+    openCurtain();  // Open the curtain when temperature is above 30°C
+  } else if (temperature < 25.0) {
+    closeCurtain();  // Close the curtain when temperature is below 25°C
+  }
+}
+
+void openCurtain() {
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, 255);
+  delay(2000);  
+  stopMotor();
+}
+
+void closeCurtain() {
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  analogWrite(enA, 255);  
+  delay(2000); 
+  stopMotor();
+}
+
+void stopMotor() {
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, 0);  
 }
