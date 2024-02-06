@@ -19,7 +19,7 @@ int pre=0;
 long t = 0;
 DHT dht(DHT11pin,DHT11);
 void setup() {
- Serial.begin(115200);
+  Serial.begin(115200);
    dht.begin();
   pinMode(irPin1, INPUT);
   pinMode(irPin2, INPUT);
@@ -29,15 +29,24 @@ void setup() {
   pinMode(in2, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
+  t= millis();
 }
 
 void loop() {
   counter();
+  delay(100);
   fan();
-  // curtain();// Additional logic or actions can be added here
+  delay(100);
+  if((millis()-t) > 30000){
+  curtain();
+  t=millis();
+ }
+
+  // Additional logic or actions can be added here
 }
 
 void counter() {
+// Serial.println("Counting people");
   if (!digitalRead(irPin1) && i == 1 && state1) {
     insideState = true;
     delay(100);
