@@ -7,13 +7,14 @@ int in2 = 27;
 int enB = 14;
 int in3 = 32;
 int in4 = 33;
-int DHT11 = 16;
+int DHT11pin = 16;
 boolean state1 = true;
 boolean state2 = true;
 boolean insideState = false;
 boolean outsideIr = false;
 int i = 1;
-int s;
+int s = 0;
+int pre=0;
 
 void setup() {
   Serial.begin(115200);
@@ -23,7 +24,7 @@ void setup() {
 
 void loop() {
   counter();
-  // fan();
+  fan();
   // curtain();// Additional logic or actions can be added here
 }
 
@@ -68,4 +69,17 @@ void counter() {
   if (digitalRead(irPin2)) {
     state2 = true;
   }
+}
+void fan(){
+  digitalWrite(in3,LOW);
+  digitalWrite(in4,LOW);
+s = 51*count;
+if(s!=pre){
+Serial.print("Speed of fan:");
+Serial.println(s);
+analogWrite(enB,s);
+digitalWrite(in3,HIGH);
+digitalWrite(in4,LOW);
+pre=s;
+}
 }
