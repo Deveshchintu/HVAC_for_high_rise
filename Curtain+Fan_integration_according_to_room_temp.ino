@@ -60,8 +60,8 @@ void loop() {
 
   float temperature = dht.readTemperature();  // Read temperature in Celsius
   float humidity = dht.readHumidity();        // Read humidity
-      ThingSpeak.setField(1, temperature);
-    ThingSpeak.setField(3, humidity);
+      ThingSpeak.setField(2, temperature);
+    ThingSpeak.setField(4, humidity);
   if (isnan(temperature) || isnan(humidity)) {
     Serial.println("Failed to read from DHT sensor!");
     return;
